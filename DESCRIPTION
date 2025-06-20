@@ -1,0 +1,14 @@
+Package: nflendzoneData
+Title: Stores EndZone Analytics NFL Data Releases
+Version: 0.1.0
+Authors@R: 
+    person("Tyler", "Pollard", , "tylerpollard410@gmail.com", role = c("aut", "cre"))
+Description: Data release repository and helper package for the EndZone Analytics project. 
+    Provides functions for listing, accessing, and managing up-to-date NFL datasets.
+License: MIT + file LICENSE
+URL: https://github.com/TylerPollard410/nflendzoneData
+BugReports: https://github.com/TylerPollard410/nflendzoneData/issues
+Encoding: UTF-8
+Language: en-US
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
