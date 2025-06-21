@@ -1,47 +1,111 @@
 
+``` r
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
 # nflendzoneData
 
-<!-- badges: start -->
-
-[![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![License:
-CC-BY-4.0](https://img.shields.io/badge/License-CC--BY--4.0-blue.svg)](LICENSE.md)
-
-<!-- badges: end -->
-
 This repository contains automated data releases for `nflendzone`,
-published via GitHub Actions and Releases. Download and query data using
-R, Python, or other tools.
+published via GitHub Actions and Releases. You can download and analyze
+data using R, Python, or other modern tools.
 
 ## 🔧 Usage
 
 - Download manually from the [Releases
   page](https://github.com/TylerPollard410/nflendzoneData/releases).
-- Or programmatically in R:
+
+- Or programmatically in **R** (choose your format):
 
 ``` r
-# Download the latest season_standings data
-url <- sprintf("https://github.com/TylerPollard410/nflendzoneData/releases/download/season_standings/season_standings.rds")
-download.file(url, "season_standings_latest.rds")
-data <- readr::read_rds("season_standings_latest.rds")
+# RDS format (no local file needed)
+url_rds <- "https://github.com/TylerPollard410/nflendzoneData/releases/download/season_standings/season_standings.rds"
+data_rds <- readRDS(url(url_rds))
+
+# Parquet format
+library(arrow) 
+url_par <- "https://github.com/TylerPollard410/nflendzoneData/releases/download/season_standings/season_standings.parquet"
+data_par <- read_parquet(url_par)
+
+# CSV format
+library(readr)
+url_csv <- "https://github.com/TylerPollard410/nflendzoneData/releases/download/season_standings/season_standings.csv"
+data_csv <- read_csv(url_csv)
 ```
 
-You can similarly load data in Python or other languages by URL.
+- **Download and combine the latest 3 seasons (RDS, in-memory):**
+
+``` r
+library(purrr)
+years <- 2022:2024
+urls_multi_rds <- sprintf(
+  "https://github.com/TylerPollard410/nflendzoneData/releases/download/season_standings/season_standings_%s.rds",
+  years
+)
+data_multi <- purrr::map_dfr(urls_multi_rds, \(x) readRDS(url(x)))
+```
+
+- **Load multiple seasons *lazily* with
+  [duckdbfs](https://github.com/ijlyttle/duckdbfs) (recommended for
+  Shiny/cloud):**
+
+``` r
+library(duckdbfs)
+library(dplyr)
+
+# List of remote Parquet URLs for the latest 3 seasons
+years <- 2022:2024
+urls_multi_par <- sprintf(
+  "https://github.com/TylerPollard410/nflendzoneData/releases/download/season_standings/season_standings_%s.parquet",
+  years
+)
+
+ds <- duckdbfs::open_dataset(urls_multi_par, format = "parquet")
+ds  # This is a lazy Arrow/duckdb dataset
+
+# Example: Query only the rows you need (no full download!)
+df_recent <- ds |> 
+  dplyr::select(-c(MOV, SOS, SRS, OSRS, DSRS)) |>
+  dplyr::rename(sos = sos_1) |>
+  dplyr::filter(season >= 2024 & conf == "AFC") |> 
+  dplyr::collect()
+
+# Optionally visualize with nflseedR (if installed)
+# df_recent |> nflseedR::nfl_standings_prettify()
+```
+
+> **Tip:** The `duckdbfs` approach allows truly lazy queries and is how
+> our Shiny app on shinyapps.io works—keeping RAM usage low and only
+> downloading filtered data as needed.
+
+- Or programmatically in **Python**:
+
+``` python
+# RDS (requires pyreadr)
+import pyreadr, requests
+url = "https://github.com/TylerPollard410/nflendzoneData/releases/download/season_standings/season_standings.rds"
+r = requests.get(url)
+with open('season_standings_latest.rds', 'wb') as f:
+    f.write(r.content)
+result = pyreadr.read_r('season_standings_latest.rds')
+df = result[None]
+
+# Parquet
+import pandas as pd
+df = pd.read_parquet("https://github.com/TylerPollard410/nflendzoneData/releases/download/season_standings/season_standings.parquet")
+
+# CSV
+df = pd.read_csv("https://github.com/TylerPollard410/nflendzoneData/releases/download/season_standings/season_standings.csv")
+```
+
+You can similarly load other datasets by substituting the tag and
+filename.
+
+------------------------------------------------------------------------
 
 ## 📊 Automation Status
 
 The table below shows which data sets are available and when they were
 last updated:
-
-    #> 
-    #> Attaching package: 'dplyr'
-    #> The following objects are masked from 'package:stats':
-    #> 
-    #>     filter, lag
-    #> The following objects are masked from 'package:base':
-    #> 
-    #>     intersect, setdiff, setequal, union
 
 | Dataset | Description | Status | Last Updated |
 |:---|:---|:---|:---|
@@ -58,6 +122,8 @@ last updated:
 | model_data | Model-ready dataset | ![model_data_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/update_data.yml?label=model_data&style=flat-square) | [![model_data_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/model_data/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/model_data) |
 
 Automation status for nflendzone data releases.
+
+------------------------------------------------------------------------
 
 ## About the Data
 
@@ -77,14 +143,20 @@ Automation status for nflendzone data releases.
 
 *(Update or expand description as needed.)*
 
+------------------------------------------------------------------------
+
 ## 🗓️ Update Schedule
 
 Data updates are triggered daily at 4 AM Eastern during the NFL season
 (September–February) via GitHub Actions in the `nflendzonePipeline`
 repo.
 
+------------------------------------------------------------------------
+
 ## ⚖️ License
 
 All data is released under [CC‑BY‑4.0](LICENSE.md). If you use this
 data, please cite the repository and include a link to the corresponding
 release tag.
+
+------------------------------------------------------------------------
