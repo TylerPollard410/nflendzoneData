@@ -102,10 +102,3 @@ download.file(
 
 ---
 
-# License
-
-Data and code in this repo are released under the MIT License (or specify your own license).
-
-## Code of Conduct
-
-Please note that the nflendzoneData project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/1/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
