@@ -3,16 +3,7 @@ output: github_document
 ---
 
 ```{r, include=FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
-)
-library(dplyr)
-library(glue)
-library(tibble)
-library(tidyr)
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
 # nflendzoneData
@@ -20,85 +11,82 @@ library(tidyr)
 <!-- badges: start -->
 
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![License: CC-BY-4.0](https://img.shields.io/badge/License-CC--BY--4.0-blue.svg)](LICENSE.md)
+
 <!-- badges: end -->
 
-This repository holds automated data releases for the `nflendzone` project (all data is published via GitHub Actions and GitHub Releases).
+This repository contains automated data releases for `nflendzone`, published via GitHub Actions and Releases. Download and query data using R, Python, or other tools.
 
-## Usage
+## 🔧 Usage
 
-You can download data hosted here directly from the [releases page](https://github.com/TyleerPollard410/nflendzoneData/releases) or programmatically via your own R functions.
-
-## Automation Status
-
-The following table shows the current status and last update of all automated data releases.
-
-```{r automation-status-table, echo=FALSE, message=FALSE, warning=FALSE}
-# ---- List your data tags here ----
-tags <- tribble(
-  ~tag,           ~caption,                   ~workflow_yaml,
-  "scores",       "Game scores (all years)",  "update_scores.yml",
-  "standings",    "Season standings",         "update_standings.yml"
-  # Add more datasets/tags as needed!
-)
-
-# Function to build badge URL for each tag
-badge_url <- function(tag) {
-  url <- glue("https://github.com/TylerPollard410/nflendzoneData/releases/download/{tag}/timestamp.json")
-  glue("[![{tag}](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=last_updated&style=flat-square&url={url})](https://github.com/TylerPollard410/nflendzoneData/releases/tag/{tag})")
-}
-
-# Function to build workflow badge for each tag
-workflow_badge <- function(workflow_yaml, tag) {
-  glue("![status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzoneData/{workflow_yaml}?label={tag}_status&style=flat-square)")
-}
-
-status_tbl <- tags |>
-  mutate(
-    Status = workflow_badge(workflow_yaml, tag),
-    `Last Updated` = badge_url(tag)
-  ) |>
-  select(Dataset = tag, Description = caption, Status, `Last Updated`)
-
-knitr::kable(status_tbl, caption = "Automation status of all data releases. Click the 'Last Updated' badge to view the release for each dataset.")
-```
-
----
-
-## About Each Data Release
-
-* **scores:** Contains final and in-progress scores for every game since 2006.
-  *Data release*: The `.parquet` and `.rds` files are updated weekly during the season and after each round of games.
-* **standings:** Aggregated standings, win/loss/tie records by season and division.
-  *Data release*: Standings are updated every week after all games have concluded.
-
-<!-- Repeat or update for each of your tags/datasets. Update the captions above as needed for each tag. -->
-
----
-
-## How to Customize Tag Captions
-
-In the status table code chunk, edit the `caption` for each tag to briefly explain what’s in that dataset/tag, e.g.:
-
-* `"scores", "Game scores (all years)", ...`
-* `"model_predictions", "Model output and forecasts", ...`
-* `"weekly_props", "Player prop data, weekly", ...`
-
-Use a clear, concise phrase.
-**The best captions:**
-
-* Identify data type, granularity, or special purpose (e.g., "Full-season EPA summaries" or "Play-by-play with advanced metrics").
-
----
-
-## Programmatic Access Example (optional)
+* Download manually from the [Releases page](https://github.com/TylerPollard410/nflendzoneData/releases).
+* Or programmatically in R:
 
 ```r
-# Example R code to download the latest scores file:
-download.file(
-  url = "https://github.com/TylerPollard410/nflendzoneData/releases/download/scores/scores_2024.rds",
-  destfile = "scores_2024.rds"
-)
+# Download the latest season_standings data
+url <- sprintf("https://github.com/TylerPollard410/nflendzoneData/releases/download/season_standings/season_standings.rds")
+download.file(url, "season_standings_latest.rds")
+data <- readr::read_rds("season_standings_latest.rds")
 ```
 
----
+You can similarly load data in Python or other languages by URL.
 
+## 📊 Automation Status
+
+The table below shows which data sets are available and when they were last updated:
+
+```{r status-table, echo=FALSE}
+library(glue)
+library(dplyr)
+library(knitr)
+
+tags <- tribble(
+  ~tag,                  ~caption,                         ~workflow,
+  "season_standings",    "Season standings (by season)",    "update_data.yml",
+  "weekly_standings",    "Weekly standings",                "update_data.yml",
+  "elo",                 "ELO ratings by season",           "update_data.yml",
+  "srs",                 "SRS ratings by season",           "update_data.yml",
+  "epa",                 "Season EPA summaries",            "update_data.yml",
+  "scores",              "Game scores (all years)",         "update_data.yml",
+  "series",              "Series-level summaries",           "update_data.yml",
+  "turnover",            "Turnover stats",                  "update_data.yml",
+  "redzone",             "Red zone efficiency",             "update_data.yml",
+  "model_data_long",     "Long-form model data",            "update_data.yml",
+  "model_data",          "Model-ready dataset",             "update_data.yml"
+)
+
+status_tbl <- tags %>%
+  mutate(
+    Status = glue("![{tag}_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/{workflow}?label={tag}&style=flat-square)"),
+    `Last Updated` = glue("[![{tag}_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/{tag}/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/{tag})")
+  ) %>%
+  select(Dataset = tag, Description = caption, Status, `Last Updated`)
+
+knitr::kable(status_tbl, caption = "Automation status for nflendzone data releases.")
+```
+
+## About the Data
+
+| Tag                | Description                             |
+| ------------------ | --------------------------------------- |
+| `season_standings` | Finalised standings for each NFL season |
+| `weekly_standings` | Standings updated weekly                |
+| `elo`              | Season-by-season ELO ratings            |
+| `srs`              | Season-by-season SRS ratings            |
+| `epa`              | Season expected points added summaries  |
+| `scores`           | Game-level scores across all seasons    |
+| `series`           | Head-to-head series stats               |
+| `turnover`         | Turnovers by team/season                |
+| `redzone`          | Red-zone efficiency metrics             |
+| `model_data_long`  | Long-form dataset ready for modeling    |
+| `model_data`       | Compact model-ready dataset             |
+
+*(Update or expand description as needed.)*
+
+## 🗓️ Update Schedule
+
+Data updates are triggered daily at 4 AM Eastern during the NFL season (September–February) via GitHub Actions in the `nflendzonePipeline` repo.
+
+## ⚖️ License
+
+All data is released under [CC‑BY‑4.0](LICENSE.md). If you use this data, please cite the repository and include a link to the corresponding release tag.
