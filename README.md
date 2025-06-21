@@ -3,10 +3,12 @@
 
 <!-- badges: start -->
 
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-This repository holds automated data releases for the `mydata` project
-(all data is published via GitHub Actions and GitHub Releases).
+This repository holds automated data releases for the `nflendzone`
+project (all data is published via GitHub Actions and GitHub Releases).
 
 ## Usage
 
@@ -74,3 +76,10 @@ download.file(
 
 Data and code in this repo are released under the MIT License (or
 specify your own license).
+
+## Code of Conduct
+
+Please note that the nflendzoneData project is released with a
+[Contributor Code of
+Conduct](https://contributor-covenant.org/version/2/1/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.
