@@ -2,15 +2,75 @@
 output: github_document
 ---
 
-```{r}
+```{r, echo = FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
 # nflendzoneData
 
-This repository contains automated data releases for `nflendzone`, published via GitHub Actions and Releases. You can download and analyze data using R, Python, or other modern tools.
+This repository contains automated data releases for `nflendzone`, published via GitHub Actions and Releases. All data here is derived from and powered by the [nflverse project](https://nflverse.com/), which provides open, community-driven, regularly maintained NFL data resources for R and Python. You can download and analyze data using R, Python, or other modern tools.
 
-## 🔧 Usage
+## 🤖 Automation Status
+
+The table below shows which data sets are available and when they were last updated:
+
+```{r}
+library(glue)
+library(dplyr)
+library(knitr)
+
+tags <- tribble(
+  ~tag,                  ~caption,                         ~workflow,
+  "season_standings",    "Season standings (by season)",    "update_data.yml",
+  "weekly_standings",    "Weekly standings",                "update_data.yml",
+  "elo",                 "ELO ratings by season",           "update_data.yml",
+  "srs",                 "SRS ratings by season",           "update_data.yml",
+  "epa",                 "Season EPA summaries",            "update_data.yml",
+  "scores",              "Game scores (all years)",         "update_data.yml",
+  "series",              "Series-level summaries",          "update_data.yml",
+  "turnover",            "Turnover stats",                  "update_data.yml",
+  "redzone",             "Red zone efficiency",             "update_data.yml",
+  "model_data_long",     "Long-form model data",            "update_data.yml",
+  "model_data",          "Model-ready dataset",             "update_data.yml"
+)
+
+status_tbl <- tags %>%
+  mutate(
+    Status = glue("![{tag}_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/{workflow}?label={tag}&style=flat-square)"),
+    `Last Updated` = glue("[![{tag}_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/{tag}/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/{tag})")
+  ) %>%
+  select(Dataset = tag, Description = caption, Status, `Last Updated`)
+
+knitr::kable(status_tbl, caption = "Automation status for nflendzone data releases.")
+```
+
+---
+
+## 📊️ About the Data
+
+| Tag                | Description                             |
+| ------------------ | --------------------------------------- |
+| `season_standings` | Finalised standings for each NFL season |
+| `weekly_standings` | Standings updated weekly                |
+| `elo`              | Season-by-season ELO ratings            |
+| `srs`              | Season-by-season SRS ratings            |
+| `epa`              | Season expected points added summaries  |
+| `scores`           | Game-level scores across all seasons    |
+| `series`           | Head-to-head series stats               |
+| `turnover`         | Turnovers by team/season                |
+| `redzone`          | Red-zone efficiency metrics             |
+| `model_data_long`  | Long-form dataset ready for modeling    |
+| `model_data`       | Compact model-ready dataset             |
+
+---
+
+## 📆 Update Schedule
+
+Data updates are triggered daily at 4 AM Eastern during the NFL season (September–February) via GitHub Actions in the `nflendzonePipeline` repo.
+
+---
+
+## 🛠️ Usage
 
 * Download manually from the [Releases page](https://github.com/TylerPollard410/nflendzoneData/releases).
 
@@ -32,48 +92,6 @@ url_csv <- "https://github.com/TylerPollard410/nflendzoneData/releases/download/
 data_csv <- read_csv(url_csv)
 ```
 
-* **Download and combine the latest 3 seasons (RDS, in-memory):**
-
-```r
-library(purrr)
-years <- 2022:2024
-urls_multi_rds <- sprintf(
-  "https://github.com/TylerPollard410/nflendzoneData/releases/download/season_standings/season_standings_%s.rds",
-  years
-)
-data_multi <- purrr::map_dfr(urls_multi_rds, \(x) readRDS(url(x)))
-```
-
-* **Load multiple seasons *lazily* with [duckdbfs](https://github.com/ijlyttle/duckdbfs) (recommended for Shiny/cloud):**
-
-```r
-library(duckdbfs)
-library(dplyr)
-
-# List of remote Parquet URLs for the latest 3 seasons
-years <- 2022:2024
-urls_multi_par <- sprintf(
-  "https://github.com/TylerPollard410/nflendzoneData/releases/download/season_standings/season_standings_%s.parquet",
-  years
-)
-
-ds <- duckdbfs::open_dataset(urls_multi_par, format = "parquet")
-ds  # This is a lazy Arrow/duckdb dataset
-
-# Example: Query only the rows you need (no full download!)
-df_recent <- ds |> 
-  dplyr::select(-c(MOV, SOS, SRS, OSRS, DSRS)) |>
-  dplyr::rename(sos = sos_1) |>
-  dplyr::filter(season >= 2024 & conf == "AFC") |> 
-  dplyr::collect()
-
-# Optionally visualize with nflseedR (if installed)
-# df_recent |> nflseedR::nfl_standings_prettify()
-```
-
-> **Tip:**
-> The `duckdbfs` approach allows truly lazy queries and is how our Shiny app on shinyapps.io works—keeping RAM usage low and only downloading filtered data as needed.
-
 * Or programmatically in **Python**:
 
 ```python
@@ -94,69 +112,56 @@ df = pd.read_parquet("https://github.com/TylerPollard410/nflendzoneData/releases
 df = pd.read_csv("https://github.com/TylerPollard410/nflendzoneData/releases/download/season_standings/season_standings.csv")
 ```
 
-You can similarly load other datasets by substituting the tag and filename.
+* **Download and combine the latest 3 seasons (RDS, in-memory):**
 
----
+```r
+library(purrr)
+years <- 2022:2024
+urls_multi_rds <- sprintf(
+  "https://github.com/TylerPollard410/nflendzoneData/releases/download/season_standings/season_standings_%s.rds",
+  years
+)
+data_multi <- purrr::map_dfr(urls_multi_rds, \(x) readRDS(url(x)))
+```
 
-## 📊 Automation Status
+* **Load multiple seasons *lazily* with [duckdbfs](https://github.com/ijlyttle/duckdbfs) (recommended for Shiny/cloud):**
 
-The table below shows which data sets are available and when they were last updated:
-
-```{r, echo=FALSE, message=FALSE}
-library(glue)
+```{r, message=FALSE}
+library(duckdbfs)
 library(dplyr)
-library(knitr)
 
-tags <- tribble(
-  ~tag,                  ~caption,                         ~workflow,
-  "season_standings",    "Season standings (by season)",    "update_data.yml",
-  "weekly_standings",    "Weekly standings",                "update_data.yml",
-  "elo",                 "ELO ratings by season",           "update_data.yml",
-  "srs",                 "SRS ratings by season",           "update_data.yml",
-  "epa",                 "Season EPA summaries",            "update_data.yml",
-  "scores",              "Game scores (all years)",         "update_data.yml",
-  "series",              "Series-level summaries",           "update_data.yml",
-  "turnover",            "Turnover stats",                  "update_data.yml",
-  "redzone",             "Red zone efficiency",             "update_data.yml",
-  "model_data_long",     "Long-form model data",            "update_data.yml",
-  "model_data",          "Model-ready dataset",             "update_data.yml"
+# List of remote Parquet URLs for the latest 3 seasons
+years <- 2022:2024
+urls_multi_par <- sprintf(
+  "https://github.com/TylerPollard410/nflendzoneData/releases/download/season_standings/season_standings_%s.parquet",
+  years
 )
 
-status_tbl <- tags %>%
-  mutate(
-    Status = glue("![{tag}_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/{workflow}?label={tag}&style=flat-square)"),
-    `Last Updated` = glue("[![{tag}_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/{tag}/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/{tag})")
-  ) %>%
-  select(Dataset = tag, Description = caption, Status, `Last Updated`)
+ds <- duckdbfs::open_dataset(urls_multi_par, format = "parquet")
+ds  # This is a lazy Arrow/duckdb dataset
 
-knitr::kable(status_tbl, caption = "Automation status for nflendzone data releases.")
+# Example: Query only the rows you need (no full download!)
+df_recent <- ds |> 
+  dplyr::select(-c(MOV, SOS, SRS, OSRS, DSRS)) |>
+  dplyr::rename(sos = sos_1) |>
+  dplyr::filter(season >= 2024 & conf == "AFC") |> 
+  dplyr::collect()
 ```
 
 ---
 
-## About the Data
+> **Tip:**
+> The `duckdbfs` with `dplyr` approach allows truly lazy queries and is how our Shiny app on shinyapps.io works—keeping RAM usage low and only downloading filtered data as needed.
 
-| Tag                | Description                             |
-| ------------------ | --------------------------------------- |
-| `season_standings` | Finalised standings for each NFL season |
-| `weekly_standings` | Standings updated weekly                |
-| `elo`              | Season-by-season ELO ratings            |
-| `srs`              | Season-by-season SRS ratings            |
-| `epa`              | Season expected points added summaries  |
-| `scores`           | Game-level scores across all seasons    |
-| `series`           | Head-to-head series stats               |
-| `turnover`         | Turnovers by team/season                |
-| `redzone`          | Red-zone efficiency metrics             |
-| `model_data_long`  | Long-form dataset ready for modeling    |
-| `model_data`       | Compact model-ready dataset             |
+## 📈 Visualization
 
-*(Update or expand description as needed.)*
+The [nflverse](https://nflverse.com/) R packages, which power the data in this repo, also provide convenient built-in functions for visualizing and exploring NFL data. For example, you can use `nflseedR::nfl_standings_prettify()` to generate high-quality standings tables from your queried data.
 
----
-
-## 🗓️ Update Schedule
-
-Data updates are triggered daily at 4 AM Eastern during the NFL season (September–February) via GitHub Actions in the `nflendzonePipeline` repo.
+```{r, message=FALSE}
+# Generate standings table using nflseedR built-in function
+library(nflseedR)
+df_recent |> nflseedR::nfl_standings_prettify()
+```
 
 ---
 
@@ -166,3 +171,4 @@ All data is released under [CC‑BY‑4.0](LICENSE.md). If you use this data, pl
 
 ---
 
+Let me know if you want additional code snippets, a FAQ, or to highlight more power-user tricks (e.g., batch downloading, query examples, etc)!
