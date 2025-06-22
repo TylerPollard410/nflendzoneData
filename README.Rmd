@@ -163,7 +163,7 @@ library(nflseedR)
 library(gt)
 df_recent |> 
   nflseedR::nfl_standings_prettify() |>
-  as_raw_html()
+  as_raw_html(inline_css = TRUE)
 ```
 
 ---

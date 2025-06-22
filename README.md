@@ -137,7 +137,7 @@ urls_multi_par <- sprintf(
 
 ds <- duckdbfs::open_dataset(urls_multi_par, format = "parquet")
 ds  # This is a lazy Arrow/duckdb dataset
-#> # Source:   table<geqembaanmppywe> [?? x 26]
+#> # Source:   table<kxilosmgmxhietx> [?? x 26]
 #> # Database: DuckDB v1.3.0 [root@Darwin 22.6.0:R 4.5.0/:memory:]
 #>    season team  conf  division  games  wins true_wins losses  ties    pf    pa
 #>     <int> <chr> <chr> <chr>     <int> <dbl>     <int>  <int> <int> <int> <int>
@@ -185,7 +185,7 @@ library(nflseedR)
 library(gt)
 df_recent |> 
   nflseedR::nfl_standings_prettify() |>
-  as_raw_html()
+  as_raw_html(inline_css = TRUE)
 ```
 
 <div id="nflseedR_standings" style="padding-left: 0px; padding-right: 0px; padding-top: 10px; padding-bottom: 10px; width: auto; height: auto; overflow-x: unset; overflow-y: unset;">
