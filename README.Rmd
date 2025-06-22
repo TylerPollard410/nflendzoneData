@@ -157,13 +157,25 @@ df_recent <- ds |>
 
 The [nflverse](https://nflverse.com/) R packages, which power the data in this repo, also provide convenient built-in functions for visualizing and exploring NFL data. For example, you can use `nflseedR::nfl_standings_prettify()` to generate high-quality standings tables from your queried data.
 
-```{r, message=FALSE}
+```{r, eval=FALSE, echo=TRUE, message=FALSE}
+# Generate standings table using nflseedR built-in function
+library(nflseedR)
+library(gt)
+df_recent |> 
+  nflseedR::nfl_standings_prettify()
+```
+
+```{r, eval=TRUE, echo=FALSE, message=FALSE}
 # Generate standings table using nflseedR built-in function
 library(nflseedR)
 library(gt)
 df_recent |> 
   nflseedR::nfl_standings_prettify() |>
-  as_raw_html(inline_css = TRUE)
+  gtsave("man/figures/standings_tab.png", expand = 10)
+```
+
+```{r, eval=TRUE, echo=FALSE, message=FALSE}
+knitr::include_graphics("man/figures/standings_tab.png")
 ```
 
 ---
