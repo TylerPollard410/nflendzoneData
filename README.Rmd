@@ -10,59 +10,93 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 
 This repository contains automated data releases for `nflendzone`, published via GitHub Actions and Releases. All data here is derived from and powered by the [nflverse project](https://nflverse.com/), which provides open, community-driven, regularly maintained NFL data resources for R and Python. You can download and analyze data using R, Python, or other modern tools.
 
-## 🤖 Automation Status
-
-The table below shows which data sets are available and when they were last updated:
-
-```{r, echo=FALSE}
-library(glue)
-library(dplyr)
-library(knitr)
-
-tags <- tribble(
-  ~tag,                  ~caption,                         ~workflow,
-  "season_standings",    "Season standings (by season)",    "update_data.yml",
-  "weekly_standings",    "Weekly standings",                "update_data.yml",
-  "elo",                 "ELO ratings by season",           "update_data.yml",
-  "srs",                 "SRS ratings by season",           "update_data.yml",
-  "epa",                 "Season EPA summaries",            "update_data.yml",
-  "scores",              "Game scores (all years)",         "update_data.yml",
-  "series",              "Series-level summaries",          "update_data.yml",
-  "turnover",            "Turnover stats",                  "update_data.yml",
-  "redzone",             "Red zone efficiency",             "update_data.yml",
-  "model_data_long",     "Long-form model data",            "update_data.yml",
-  "model_data",          "Model-ready dataset",             "update_data.yml"
-)
-
-status_tbl <- tags %>%
-  mutate(
-    Status = glue("![{tag}_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/{workflow}?label={tag}&style=flat-square)"),
-    `Last Updated` = glue("[![{tag}_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/{tag}/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/{tag})")
-  ) %>%
-  select(Dataset = tag, Description = caption, Status, `Last Updated`)
-
-knitr::kable(status_tbl, caption = "Automation status for nflendzone data releases.")
-```
-
 ---
 
 ## 📊️ About the Data
 
-| Tag                | Description                             |
-| ------------------ | --------------------------------------- |
-| `season_standings` | Finalised standings for each NFL season |
-| `weekly_standings` | Standings updated weekly                |
-| `elo`              | Season-by-season ELO ratings            |
-| `srs`              | Season-by-season SRS ratings            |
-| `epa`              | Season expected points added summaries  |
-| `scores`           | Game-level scores across all seasons    |
-| `series`           | Head-to-head series stats               |
-| `turnover`         | Turnovers by team/season                |
-| `redzone`          | Red-zone efficiency metrics             |
-| `model_data_long`  | Long-form dataset ready for modeling    |
-| `model_data`       | Compact model-ready dataset             |
+| Tag                               | Description                                        |
+| --------------------------------- | -------------------------------------------------- |
+| `nfl_stats_week_team_regpost`     | Weekly team stats (regular and postseason)         |
+| `nfl_stats_week_player_regpost`   | Weekly player stats (regular and postseason)       |
+| `nfl_stats_season_team_regpost`   | Season-level team stats (regular and postseason)   |
+| `nfl_stats_season_player_regpost` | Season-level player stats (regular and postseason) |
+| `season_standings`                | Finalized standings for each NFL season            |
+| `weekly_standings`                | Standings updated weekly                           |
+| `elo`                             | Season-by-season ELO ratings                       |
+| `srs`                             | Season-by-season Simple Rating System ratings      |
+| `epa`                             | Season expected points added summaries             |
+| `scores`                          | Team-level scores across all seasons               |
+| `series`                          | Team-level series conversion rate stats            |
+| `turnover`                        | Turnovers by team/season                           |
+| `redzone`                         | Red-zone efficiency metrics                        |
+| `team_features`                   | Team-level feature set for modeling                |
+| `game_features`                   | Game-level feature set for modeling                |
+| `team_model`                      | Model-ready team-level dataset                     |
+| `game_model`                      | Model-ready game-level dataset                     |
+
 
 ---
+
+## 🤖 Automation Status
+
+The table below shows which data sets are available and when they were last updated:
+
+```{r, echo=FALSE, message=FALSE}
+library(glue)
+library(dplyr)
+library(knitr)
+
+# tags <- tribble(
+#   ~tag,                  ~caption,                         ~workflow,
+#   "season_standings",    "Season standings (by season)",    "update_data.yml",
+#   "weekly_standings",    "Weekly standings",                "update_data.yml",
+#   "elo",                 "ELO ratings by season",           "update_data.yml",
+#   "srs",                 "SRS ratings by season",           "update_data.yml",
+#   "epa",                 "Season EPA summaries",            "update_data.yml",
+#   "scores",              "Game scores (all years)",         "update_data.yml",
+#   "series",              "Series-level summaries",          "update_data.yml",
+#   "turnover",            "Turnover stats",                  "update_data.yml",
+#   "redzone",             "Red zone efficiency",             "update_data.yml",
+#   "model_data_long",     "Long-form model data",            "update_data.yml",
+#   "model_data",          "Model-ready dataset",             "update_data.yml"
+# )
+
+tags <- c(
+  # nflverse
+  "nfl_stats_week_team_regpost",
+  "nfl_stats_week_player_regpost",
+  "nfl_stats_season_team_regpost",
+  "nfl_stats_season_player_regpost",
+  # Derived
+  "season_standings",
+  "weekly_standings",
+  "elo",
+  "srs",
+  "epa",
+  "scores",
+  "series",
+  "turnover",
+  "redzone",
+  # Modeling
+  "team_features",
+  "game_features",
+  "team_model",
+  "game_model"
+)
+
+status_tbl <- tibble(tag = tags, workflow = "update_data.yml") |>
+  mutate(
+    Status = glue("![{tag}_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/{workflow}?label={tag}&style=flat-square)"),
+    `Last Updated` = glue("[![{tag}_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/{tag}/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/{tag})")
+  ) |>
+  mutate(Status = glue::glue("[{Status}](https://github.com/TylerPollard410/nflendzoneData/releases/tag/{tag})")) |>
+  select(Dataset = tag, 
+         #Description = caption, 
+         Status, 
+         `Last Updated`)
+
+knitr::kable(status_tbl, caption = "Automation status for nflendzone data releases.")
+```
 
 ## 📆 Update Schedule
 

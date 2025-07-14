@@ -8,55 +8,58 @@ provides open, community-driven, regularly maintained NFL data resources
 for R and Python. You can download and analyze data using R, Python, or
 other modern tools.
 
+------------------------------------------------------------------------
+
+## 📊️ About the Data
+
+| Tag | Description |
+|----|----|
+| `nfl_stats_week_team_regpost` | Weekly team stats (regular and postseason) |
+| `nfl_stats_week_player_regpost` | Weekly player stats (regular and postseason) |
+| `nfl_stats_season_team_regpost` | Season-level team stats (regular and postseason) |
+| `nfl_stats_season_player_regpost` | Season-level player stats (regular and postseason) |
+| `season_standings` | Finalized standings for each NFL season |
+| `weekly_standings` | Standings updated weekly |
+| `elo` | Season-by-season ELO ratings |
+| `srs` | Season-by-season Simple Rating System ratings |
+| `epa` | Season expected points added summaries |
+| `scores` | Team-level scores across all seasons |
+| `series` | Team-level series conversion rate stats |
+| `turnover` | Turnovers by team/season |
+| `redzone` | Red-zone efficiency metrics |
+| `team_features` | Team-level feature set for modeling |
+| `game_features` | Game-level feature set for modeling |
+| `team_model` | Model-ready team-level dataset |
+| `game_model` | Model-ready game-level dataset |
+
+------------------------------------------------------------------------
+
 ## 🤖 Automation Status
 
 The table below shows which data sets are available and when they were
 last updated:
 
-    #> 
-    #> Attaching package: 'dplyr'
-    #> The following objects are masked from 'package:stats':
-    #> 
-    #>     filter, lag
-    #> The following objects are masked from 'package:base':
-    #> 
-    #>     intersect, setdiff, setequal, union
-
-| Dataset | Description | Status | Last Updated |
-|:---|:---|:---|:---|
-| season_standings | Season standings (by season) | ![season_standings_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/update_data.yml?label=season_standings&style=flat-square) | [![season_standings_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/season_standings/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/season_standings) |
-| weekly_standings | Weekly standings | ![weekly_standings_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/update_data.yml?label=weekly_standings&style=flat-square) | [![weekly_standings_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/weekly_standings/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/weekly_standings) |
-| elo | ELO ratings by season | ![elo_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/update_data.yml?label=elo&style=flat-square) | [![elo_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/elo/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/elo) |
-| srs | SRS ratings by season | ![srs_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/update_data.yml?label=srs&style=flat-square) | [![srs_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/srs/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/srs) |
-| epa | Season EPA summaries | ![epa_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/update_data.yml?label=epa&style=flat-square) | [![epa_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/epa/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/epa) |
-| scores | Game scores (all years) | ![scores_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/update_data.yml?label=scores&style=flat-square) | [![scores_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/scores/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/scores) |
-| series | Series-level summaries | ![series_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/update_data.yml?label=series&style=flat-square) | [![series_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/series/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/series) |
-| turnover | Turnover stats | ![turnover_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/update_data.yml?label=turnover&style=flat-square) | [![turnover_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/turnover/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/turnover) |
-| redzone | Red zone efficiency | ![redzone_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/update_data.yml?label=redzone&style=flat-square) | [![redzone_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/redzone/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/redzone) |
-| model_data_long | Long-form model data | ![model_data_long_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/update_data.yml?label=model_data_long&style=flat-square) | [![model_data_long_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/model_data_long/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/model_data_long) |
-| model_data | Model-ready dataset | ![model_data_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/update_data.yml?label=model_data&style=flat-square) | [![model_data_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/model_data/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/model_data) |
+| Dataset | Status | Last Updated |
+|:---|:---|:---|
+| nfl_stats_week_team_regpost | [![nfl_stats_week_team_regpost_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/update_data.yml?label=nfl_stats_week_team_regpost&style=flat-square)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/nfl_stats_week_team_regpost) | [![nfl_stats_week_team_regpost_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/nfl_stats_week_team_regpost/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/nfl_stats_week_team_regpost) |
+| nfl_stats_week_player_regpost | [![nfl_stats_week_player_regpost_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/update_data.yml?label=nfl_stats_week_player_regpost&style=flat-square)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/nfl_stats_week_player_regpost) | [![nfl_stats_week_player_regpost_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/nfl_stats_week_player_regpost/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/nfl_stats_week_player_regpost) |
+| nfl_stats_season_team_regpost | [![nfl_stats_season_team_regpost_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/update_data.yml?label=nfl_stats_season_team_regpost&style=flat-square)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/nfl_stats_season_team_regpost) | [![nfl_stats_season_team_regpost_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/nfl_stats_season_team_regpost/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/nfl_stats_season_team_regpost) |
+| nfl_stats_season_player_regpost | [![nfl_stats_season_player_regpost_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/update_data.yml?label=nfl_stats_season_player_regpost&style=flat-square)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/nfl_stats_season_player_regpost) | [![nfl_stats_season_player_regpost_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/nfl_stats_season_player_regpost/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/nfl_stats_season_player_regpost) |
+| season_standings | [![season_standings_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/update_data.yml?label=season_standings&style=flat-square)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/season_standings) | [![season_standings_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/season_standings/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/season_standings) |
+| weekly_standings | [![weekly_standings_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/update_data.yml?label=weekly_standings&style=flat-square)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/weekly_standings) | [![weekly_standings_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/weekly_standings/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/weekly_standings) |
+| elo | [![elo_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/update_data.yml?label=elo&style=flat-square)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/elo) | [![elo_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/elo/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/elo) |
+| srs | [![srs_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/update_data.yml?label=srs&style=flat-square)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/srs) | [![srs_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/srs/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/srs) |
+| epa | [![epa_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/update_data.yml?label=epa&style=flat-square)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/epa) | [![epa_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/epa/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/epa) |
+| scores | [![scores_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/update_data.yml?label=scores&style=flat-square)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/scores) | [![scores_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/scores/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/scores) |
+| series | [![series_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/update_data.yml?label=series&style=flat-square)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/series) | [![series_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/series/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/series) |
+| turnover | [![turnover_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/update_data.yml?label=turnover&style=flat-square)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/turnover) | [![turnover_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/turnover/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/turnover) |
+| redzone | [![redzone_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/update_data.yml?label=redzone&style=flat-square)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/redzone) | [![redzone_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/redzone/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/redzone) |
+| team_features | [![team_features_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/update_data.yml?label=team_features&style=flat-square)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/team_features) | [![team_features_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/team_features/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/team_features) |
+| game_features | [![game_features_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/update_data.yml?label=game_features&style=flat-square)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/game_features) | [![game_features_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/game_features/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/game_features) |
+| team_model | [![team_model_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/update_data.yml?label=team_model&style=flat-square)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/team_model) | [![team_model_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/team_model/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/team_model) |
+| game_model | [![game_model_status](https://img.shields.io/github/actions/workflow/status/TylerPollard410/nflendzonePipeline/update_data.yml?label=game_model&style=flat-square)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/game_model) | [![game_model_updated](https://img.shields.io/badge/dynamic/json?color=blue&label=Last%20Updated&query=updated&url=https://github.com/TylerPollard410/nflendzoneData/releases/download/game_model/timestamp.json)](https://github.com/TylerPollard410/nflendzoneData/releases/tag/game_model) |
 
 Automation status for nflendzone data releases.
-
-------------------------------------------------------------------------
-
-## 📊️ About the Data
-
-| Tag                | Description                             |
-|--------------------|-----------------------------------------|
-| `season_standings` | Finalised standings for each NFL season |
-| `weekly_standings` | Standings updated weekly                |
-| `elo`              | Season-by-season ELO ratings            |
-| `srs`              | Season-by-season SRS ratings            |
-| `epa`              | Season expected points added summaries  |
-| `scores`           | Game-level scores across all seasons    |
-| `series`           | Head-to-head series stats               |
-| `turnover`         | Turnovers by team/season                |
-| `redzone`          | Red-zone efficiency metrics             |
-| `model_data_long`  | Long-form dataset ready for modeling    |
-| `model_data`       | Compact model-ready dataset             |
-
-------------------------------------------------------------------------
 
 ## 📆 Update Schedule
 
@@ -137,8 +140,8 @@ urls_multi_par <- sprintf(
 
 ds <- duckdbfs::open_dataset(urls_multi_par, format = "parquet")
 ds  # This is a lazy Arrow/duckdb dataset
-#> # Source:   table<waecyrjgcenodzv> [?? x 26]
-#> # Database: DuckDB v1.3.0 [root@Darwin 22.6.0:R 4.5.0/:memory:]
+#> # Source:   table<cwbfnpbfrjlqxaj> [?? x 26]
+#> # Database: DuckDB v1.3.2 [root@Darwin 22.6.0:R 4.5.1/:memory:]
 #>    season team  conf  division  games  wins true_wins losses  ties    pf    pa
 #>     <int> <chr> <chr> <chr>     <int> <dbl>     <int>  <int> <int> <int> <int>
 #>  1   2022 ARI   NFC   NFC West     17     4         4     13     0   340   449
