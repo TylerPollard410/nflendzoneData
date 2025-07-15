@@ -140,7 +140,7 @@ urls_multi_par <- sprintf(
 
 ds <- duckdbfs::open_dataset(urls_multi_par, format = "parquet")
 ds  # This is a lazy Arrow/duckdb dataset
-#> # Source:   table<cwbfnpbfrjlqxaj> [?? x 26]
+#> # Source:   table<fntaaooxcqcamwj> [?? x 26]
 #> # Database: DuckDB v1.3.2 [root@Darwin 22.6.0:R 4.5.1/:memory:]
 #>    season team  conf  division  games  wins true_wins losses  ties    pf    pa
 #>     <int> <chr> <chr> <chr>     <int> <dbl>     <int>  <int> <int> <int> <int>

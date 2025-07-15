@@ -18,7 +18,8 @@ usethis::use_author(
   email = "tylerpollard410@gmail.com", # Your email
   role = c("aut", "cre") # Your role (here author/creator)
 )
-usethis::use_mit_license("Tyler Pollard")
+#usethis::use_mit_license("Tyler Pollard")
+usethis::use_ccby_license()
 
 usethis::use_readme_rmd()
 devtools::build_readme()

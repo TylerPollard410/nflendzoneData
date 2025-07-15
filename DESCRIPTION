@@ -5,7 +5,7 @@ Authors@R:
     person("Tyler", "Pollard", , "tylerpollard410@gmail.com", role = c("aut", "cre"))
 Description: Data release repository and helper package for the EndZone Analytics project. 
     Provides functions for listing, accessing, and managing up-to-date NFL datasets.
-License: MIT + file LICENSE
+License: CC BY 4.0
 URL: https://github.com/TylerPollard410/nflendzoneData
 BugReports: https://github.com/TylerPollard410/nflendzoneData/issues
 Encoding: UTF-8
